@@ -1,0 +1,274 @@
+[
+  {
+    "raw": "CATCOD",
+    "internal": "CatCod",
+    "alias": "CATCOD",
+    "tipo": "NÚMERICO",
+    "descripcion": "IDENTIFICADOR ÚNICO",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "CCATASTRAL",
+    "internal": "CatCCa",
+    "alias": "CLAVE CATASTRAL",
+    "tipo": "TEXTO",
+    "descripcion": "CLAVE CATASTRAL MUNICIPAL",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "RMC",
+    "internal": "rmc",
+    "alias": "RMC",
+    "tipo": "NÚMERICO",
+    "descripcion": "REGISTRO MUNICIPAL DE CONTRIBUYENTE, IDENTIFICA A LA PERSONA, SEA NATURAL O JURÍDICA.",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "CONTRIBUYENTE",
+    "internal": "RicNom",
+    "alias": "NOMBRE CONTRIBUYENTE",
+    "tipo": "TEXTO",
+    "descripcion": "NOMBRE DEL CONTRIBUYENTE QUIEN TIENE LA DEUDA",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "EMAIL",
+    "internal": "ricema",
+    "alias": "CORREO ELECTRÓNICO",
+    "tipo": "TEXTO",
+    "descripcion": "CORREO ELECTRÓNICO",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "TELEFONO",
+    "internal": "Tel",
+    "alias": "TELÉFONO",
+    "tipo": "NÚMERICO",
+    "descripcion": "TÉLEFONO DE CONTACTO",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "CAPITAL",
+    "internal": "Capital",
+    "alias": "CAPITAL ADEUDADO",
+    "tipo": "NÚMERICO",
+    "descripcion": "CAPITAL ADEUDADO",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "DESCUENTO",
+    "internal": "Descuento",
+    "alias": "DESCUENTO CAPITAL",
+    "tipo": "NÚMERICO",
+    "descripcion": "DESCUENTO CAPITAL",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "SALDOPENDIENTE",
+    "internal": "SaldoPendi",
+    "alias": "SALDO PENDIENTE",
+    "tipo": "NÚMERICO",
+    "descripcion": "SALDO PENDIENTE",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "INTERESES",
+    "internal": "Interes",
+    "alias": "INTERESES GENERADOS",
+    "tipo": "NÚMERICO",
+    "descripcion": "INTERESES GENERADOS",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "DSCTOINTERES",
+    "internal": "DescuentoI",
+    "alias": "DESCUENTO INTERESES",
+    "tipo": "NÚMERICO",
+    "descripcion": "DESCUENTO INTERESES",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "INTERESPENDIENTE",
+    "internal": "InteresPen",
+    "alias": "INTERES PENDIENTE PAGO",
+    "tipo": "NÚMERICO",
+    "descripcion": "INTERES PENDIENTE PAGO",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "T",
+    "internal": "T",
+    "alias": "T",
+    "tipo": "NÚMERICO",
+    "descripcion": "SIN DESCRIPCIÓN",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "CODPROYECTO",
+    "internal": "CodigoProy",
+    "alias": "CÓDIGO DE PROYECTO",
+    "tipo": "NÚMERICO",
+    "descripcion": "CÓDIGO DE PROYECTO ASOCIADO A LA DEUDA",
+    "valores_validos": "NÚMERICO"
+  },
+  {
+    "raw": "NOMBPROYECTO",
+    "internal": "NombreProy",
+    "alias": "NOMBRE PROYECTO",
+    "tipo": "TEXTO",
+    "descripcion": "NOMBRE PROYECTO",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "DSCTOPROYECTO",
+    "internal": "DsctoReglamento",
+    "alias": "DESCUENTO REGLAMENTO",
+    "tipo": "TEXTO",
+    "descripcion": "DESCUENTO PRESENTE EN EL REGLAMENTO QUE REGLAMENTA LA COBRANZA",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "USO",
+    "internal": "Uso",
+    "alias": "USO CATASTRAL",
+    "tipo": "TEXTO",
+    "descripcion": "USO CATASTRAL",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "DESCTIPMANTO",
+    "internal": "DesTipMant",
+    "alias": "TIPO MANTENIMIENTO CATASTRAL",
+    "tipo": "TEXTO",
+    "descripcion": "TIPO MANTENIMIENTO CATASTRAL",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "DIRECCIONCOBRO",
+    "internal": "Direccion",
+    "alias": "DIRECCIÓN",
+    "tipo": "TEXTO",
+    "descripcion": "DIRECCIÓN DE CONTRIBUYENTE",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "RUTACOBRO1",
+    "internal": "RutaCobro",
+    "alias": "RUTA DE COBRO",
+    "tipo": "TEXTO",
+    "descripcion": "RUTA DE COBRO",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "TIPOCUENTA1",
+    "internal": "TipoCuenta",
+    "alias": "TASA O TRIBUTO",
+    "tipo": "TEXTO",
+    "descripcion": "TASA QUE DISTINGUE SI ESTÁ EN CUENTA CORRIENTE O EN CONVENIO DE PAGO, ESTE ÚLTIMO ES ASOCIADO POR LETRAS DE PAGO",
+    "valores_validos": "TEXTO"
+  },
+  {
+    "raw": "ATM_CCORRIENTE",
+    "internal": "ExisteATM_",
+    "alias": "ESTADO ATM CUENTA CORRIENTE",
+    "tipo": "NÚMERICO",
+    "descripcion": "IDENTIFICA SI EL REGISTRO SE ENCUENTRA EN LA BASE ATM DE GESTION DE MORA CÓMO CUENTA CORRIENTE",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RMC_EXISTE_CC",
+    "internal": "PermaneceR",
+    "alias": "VALIDACION RMC ATM CUENTA CORRIENTE",
+    "tipo": "NÚMERICO",
+    "descripcion": "INDICA SI EL RMC QUE ESTÁ REGISTRADO EXISTE EN LA BASE ATM DE GESTION DE LA MORA CÓMO CUENTA CORRIENTE",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "ATM_LETRAS",
+    "internal": "ExisteATM1",
+    "alias": "ESTADO ATM LETRAS",
+    "tipo": "NÚMERICO",
+    "descripcion": "IDENTIFICA SI EL REGISTRO SE ENCUENTRA EN LA BASE ATM DE GESTION DE MORA CÓMO LETRAS DE PAGO O CONVENIO DE PAGO",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RMC_LETRAS",
+    "internal": "Permanec_1",
+    "alias": "VALIDACION RMC ATM LETRAS",
+    "tipo": "NÚMERICO",
+    "descripcion": "INDICA SI EL RMC QUE ESTÁ REGISTRADO EXISTE EN LA BASE ATM DE GESTION DE LA MORA LETRAS DE PAGO O CONVENIO DE PAGO",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RPTCAT_CCACTIVA",
+    "internal": "ExisteRPT_",
+    "alias": "ESTADO REPORTE CAT ACTIVO",
+    "tipo": "NÚMERICO",
+    "descripcion": "IDENTIFICA SI EL REGISTRO SE ENCUENTRA EN LA BASE DE CLAVES ACTIVAS DEL CATASTRO MUNICIPAL",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RMC_CCACTIVA",
+    "internal": "Permanece_",
+    "alias": "VALIDACION RMC REPORTE CAT ACTIVO",
+    "tipo": "NÚMERICO",
+    "descripcion": "INDICA SI EL RMC QUE ESTÁ REGISTRADO EN LA BASE DE CLAVES ACTIVAS DEL CATASTRO MUNICIPAL",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RPTCAT_CCANCELADA",
+    "internal": "ExisteRPT1",
+    "alias": "ESTADO REPORTE CAT CANCELADO",
+    "tipo": "NÚMERICO",
+    "descripcion": "IDENTIFICA SI EL REGISTRO SE ENCUENTRA EN LA BASE DE CLAVES CANCELADAS DEL CATASTRO MUNICIPAL",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RMC_CCANCELADA",
+    "internal": "Permanece1",
+    "alias": "VALIDACION REPORTE CAT CANCELADO",
+    "tipo": "NÚMERICO",
+    "descripcion": "INDICA SI EL RMC QUE ESTÁ REGISTRADO EN LA BASE DE CLAVES CANCELADAS DEL CATASTRO MUNICIPAL",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "ATMPPAGOS_RPT_IT",
+    "internal": "ATM_PPAGOS",
+    "alias": "ESTADO ATM PAGOS",
+    "tipo": "NÚMERICO",
+    "descripcion": "IDENTIFICA SI EL REGISTRO SE ENCUENTRA EN LA BASE ATM DE PAGOS",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "VALORPAGADOS",
+    "internal": "ValorPagados",
+    "alias": "VALOR PAGADO",
+    "tipo": "NÚMERICO",
+    "descripcion": "VALOR PAGADO EN EL RECIBO",
+    "valores_validos": "NÚMERICO O NULO SI NO HAY REGISTRO"
+  },
+  {
+    "raw": "FECHAPAGADOS",
+    "internal": "FechaPagados",
+    "alias": "FECHA PAGADO",
+    "tipo": "FECHA",
+    "descripcion": "FECHA CUANDO REALIZÓ EL PAGO",
+    "valores_validos": "FECHA O NULO SI NO HAY REGISTRO"
+  },
+  {
+    "raw": "RMC_PAGADOS",
+    "internal": "RMC_Pagados",
+    "alias": "VALIDACION RMC ATM PAGOS",
+    "tipo": "NÚMERICO",
+    "descripcion": "INDICA SI EL RMC QUE ESTÁ REGISTRADO EN LA BASE ATM DE PAGOS",
+    "valores_validos": "1: SI SE ENCUENTRA, 0: NO SE ENCUENTRA, -1: SIN DATOS, NULO: NO HAY INFORMACIÓN"
+  },
+  {
+    "raw": "RECIBO",
+    "internal": "Recibo",
+    "alias": "NÚMERO RECIBO",
+    "tipo": "NÚMERICO",
+    "descripcion": "NÚMERO RECIBO",
+    "valores_validos": "NÚMERICO O NULO SI NO HAY REGISTRO"
+  }
+]

@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tablero Deuda y Cartera - CPM (v23)</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__title">
+      <div class="topbar__name">Tablero Deuda y Cartera - CPM (v23)</div>
+      <div class="topbar__subtitle">Dashboard local (HTML) con filtros, KPIs, gráficos, tabla y visor geográfico — fuente: CSV/TXT (o DBF convertido a CSV) + Shapefile ZIP → GeoJSON</div>
+    </div>
+    <div class="topbar__actions">
+      <button id="btnSettings" class="iconbtn iconbtn--tile iconbtn--tile--header" title="Configuración"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-1.4 3.4 2 2 0 0 1-1.4-.6l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.2a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 0 1-2.8 0 2 2 0 0 1 0-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1H21a2 2 0 0 1 0 4h-.2a1.7 1.7 0 0 0-1.6 1z"/></svg></button>
+      <button id="btnExport" class="btn btn--ghost" title="Descarga el conjunto filtrado en CSV">Exportar filtrado</button>
+      <button id="btnResetAll" class="btn btn--primary">Quitar todos</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="sidebar__head">
+        <div class="sidebar__title">Filtros</div>
+        <a href="#" id="btnClearFilters" class="link">Quitar</a>
+      </div>
+<section class="card">
+        <div class="card__title">Capas geográficas</div>
+        <div class="row">
+          <button id="btnAddLayer" class="iconbtn" title="Añadir capa">+</button>
+          <div class="muted tiny" id="layerMiniHint">Cargar .zip (Shapefile) y convertir a GeoJSON localmente.</div>
+        </div>
+        <div id="layerList" class="layerlist mt10"></div>
+      </section>
+
+      <section class="card">
+        <div class="card__title">Búsqueda rápida</div>
+        <input id="searchText" class="input" placeholder="Nombre, clave catastral, dirección, ruta..." />
+        <div class="mt10 grid2">
+          <div>
+            <label class="label">Mín saldo</label>
+            <input id="minSaldo" class="input" placeholder="0" inputmode="decimal" />
+          </div>
+          <div>
+            <label class="label">Máx saldo</label>
+            <input id="maxSaldo" class="input" placeholder="∞" inputmode="decimal" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card__title">Segmentación</div>
+
+        <label class="label">Proyecto</label>
+        <select id="fProyecto" class="select" multiple size="8"></select>
+
+        <label class="label mt10">Uso</label>
+        <select id="fUso" class="select" multiple size="6"></select>
+
+        <label class="label mt10">Tipo de mantenimiento</label>
+        <select id="fMant" class="select" multiple size="6"></select>
+
+        <label class="label mt10">Tipo de cuenta</label>
+        <select id="fTipoCuenta" class="select" multiple size="4"></select>
+
+        <div class="mt10">
+          <label class="label">Métrica principal</label>
+          <select id="metricSelect" class="select"></select>
+        </div>
+
+        <div class="mt10">
+          <label class="label">Top N</label>
+          <select id="topN" class="select">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card__title">Ayuda rápida</div>
+        <ul class="bullets">
+          <li>La app funciona <b>sin internet</b>. (El mapa base OSM es opcional.)</li>
+          <li>Puedes cargar <b>CSV</b> o <b>TXT</b> con estructura tabular (delimitado por <code>,</code>, <code>;</code> o TAB y con encabezado).</li>
+          <li>Para usar <b>DBF</b>, conviértelo a CSV con el script incluido en <code>tools/</code>.</li>
+          <li>Para el visor: carga <b>Shapefile</b> en <b>ZIP</b> (mínimo .shp + .dbf).</li>
+        </ul>
+      </section>
+    </aside>
+
+    <section class="content">
+      <div class="applied">
+        <div class="applied__label">Filtros aplicados:</div>
+        <div id="appliedFilters" class="applied__chips">Ninguno</div>
+      </div>
+
+      <section class="panel panel--map" id="mapPanel">
+        <div class="panel__title">Visor geográfico</div>
+        <div class="mapwrap" id="mapWrap">
+          <canvas id="mapCanvas" aria-label="Mapa"></canvas>
+          
+          <div id="mapToolbar" class="map-toolbar">
+            <button id="mapZoomIn" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Acercar" aria-label="Acercar"></button>
+            <button id="mapZoomOut" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Alejar" aria-label="Alejar"></button>
+            <button id="mapZoomSel" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Zoom a selección" aria-label="Zoom a selección"></button>
+            <button id="mapFitAll" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Zoom a todo" aria-label="Zoom a todo"></button>
+
+            <div class="map-sep"></div>
+
+            <button id="mapIdentify" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Consultar datos" aria-label="Consultar datos"></button>
+
+            <div class="map-sep"></div>
+
+            <button id="mapBasemapToggle" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Mapa base" aria-label="Mapa base"></button>
+            <button id="btnBasemapStyles" class="iconbtn iconbtn--tile iconbtn--tile--map" title="Elegir mapa base" aria-label="Elegir mapa base"></button>
+
+            <span id="basemapHint" class="muted tiny"></span>
+          </div>
+
+          <div id="mapInfo" class="mapinfo" aria-hidden="true"></div>
+
+        </div>
+        <div class="panel__foot">Usa “Añadir capa” en el panel lateral para cargar Shapefiles comprimidos. Si vinculas la capa con la base TXT/CSV, podrás resaltar y hacer “Zoom a selección” según los filtros.</div>
+      </section>
+
+      <section class="kpis" id="kpis"></section>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panel__title" id="chart1Title">Monto por Proyecto</div>
+          <div class="chart"><canvas id="chartByProject"></canvas></div>
+          <div class="panel__foot">Suma de la métrica seleccionada por proyecto (Top N).</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__title" id="chart2Title">Monto por Uso</div>
+          <div class="chart"><canvas id="chartByUse"></canvas></div>
+          <div class="panel__foot">Suma de la métrica seleccionada por uso (Top N).</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__title" id="chart3Title">Cuentas por Tipo de Cuenta</div>
+          <div class="chart"><canvas id="chartByTipoCuenta"></canvas></div>
+          <div class="panel__foot">Conteo de registros por tipo de cuenta.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__title" id="chart4Title">Top Contribuyentes</div>
+          <div class="tablewrap">
+            <table class="table" id="topTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Clave</th>
+                  <th class="right">Métrica</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="panel__foot">Top N por métrica seleccionada.</div>
+        </div>
+      </section>
+
+      <section class="panel mt16">
+        <div class="panel__title">Detalle (tabla)</div>
+        <div class="tabletools">
+          <div class="tabletools__left">
+            <span class="muted" id="tableCount">0 registros</span>
+          </div>
+          <div class="tabletools__right">
+            <label class="muted">Filas/página</label>
+            <select id="pageSize" class="select select--sm">
+              <option value="25">25</option>
+              <option value="50" selected>50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
+        <div class="tablewrap">
+          <table class="table" id="detailTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <button id="prevPage" class="btn btn--ghost">Anterior</button>
+          <div class="pager__info" id="pageInfo">Página 1</div>
+          <button id="nextPage" class="btn btn--ghost">Siguiente</button>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>
+          Inspirado en la estructura de tablero con filtros, KPIs, gráficos y rankings.
+          <span class="muted">Funciona de manera local (HTML + JS).</span>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Modal: Añadir capa -->
+  <div id="layerModal" class="modal" aria-hidden="true">
+    <div id="layerBackdrop" class="modal__backdrop"></div>
+    <div class="modal__dialog modal__panel" role="dialog" aria-modal="true" aria-labelledby="layerModalTitle">
+      <div class="modal__head">
+        <div id="layerModalTitle" class="modal__title">Añadir capa</div>
+        <button id="layerClose" class="iconbtn iconbtn--small" title="Cerrar">×</button>
+      </div>
+      <div class="modal__body">
+        <label class="label">Shapefile en ZIP</label>
+        <input type="file" id="layerZipInput" class="input" accept=".zip" />
+        <div class="hint mt6">El ZIP debe incluir al menos: <code>.shp</code> + <code>.dbf</code> (y opcionalmente <code>.shx</code> + <code>.prj</code>).</div>
+
+        <div class="mt10">
+          <label class="label">Sistema de coordenadas (opcional)</label>
+          <select id="layerCrsOverride" class="select">
+            <option value="auto" selected>Auto (desde .prj)</option>
+            <option value="utm16n">UTM 16N (WGS84)</option>
+            <option value="utm15n">UTM 15N (WGS84)</option>
+            <option value="utm17n">UTM 17N (WGS84)</option>
+            <option value="wgs84">WGS84 (EPSG:4326)</option>
+          </select>
+          <div class="hint mt6">Si el mapa base OSM no aparece, selecciona UTM 16N para forzar reproyección a WGS84.</div>
+</div>
+
+        <div class="mt10">
+          <label class="toggle">
+            <input type="checkbox" id="linkToTxt" />
+            <span>Vincular con base TXT/CSV cargada</span>
+          </label>
+          <div id="linkDisabledHint" class="muted tiny mt6">Carga primero el TXT/CSV para habilitar la vinculación.</div>
+        </div>
+
+        <div id="joinOptions" class="joinbox mt10" hidden>
+          <div class="grid2">
+            <div>
+              <label class="label">Llave de unión (capa geográfica)</label>
+              <select id="shpJoinField" class="select"></select>
+            </div>
+            <div>
+              <label class="label">Llave de unión (base TXT/CSV)</label>
+              <select id="txtJoinField" class="select"></select>
+            </div>
+          </div>
+          <div class="hint mt6">Se resaltarán geometrías según los filtros aplicados y podrás usar “Zoom a selección”.</div>
+        </div>
+
+        <div id="layerMeta" class="status mt10">Sin archivo seleccionado.</div>
+      </div>
+
+      <div class="modal__foot">
+        <button id="btnAddLayerConfirm" class="btn btn--primary">Cargar capa</button>
+        <button id="btnAddLayerCancel" class="btn btn--ghost">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!-- Modal: Estilo de capa -->
+  <div id="styleModal" class="modal" aria-hidden="true">
+    <div id="styleBackdrop" class="modal__backdrop"></div>
+    <div class="modal__dialog modal__dialog--wide" role="dialog" aria-modal="true" aria-labelledby="styleModalTitle">
+      <div class="modal__head">
+        <div id="styleModalTitle" class="modal__title">Selector de símbolo</div>
+        <button id="styleClose" class="iconbtn iconbtn--small" title="Cerrar">×</button>
+      </div>
+
+      <div class="modal__body">
+        <div class="styleShell">
+          <!-- Left: presets -->
+          <div class="styleLeft">
+            <div class="styleSectionTitle">Presets</div>
+
+            <div class="styleBlock">
+              <div class="label">Colores</div>
+              <div id="stylePresetColors" class="presetSwatches"></div>
+              <div class="hint tiny mt6">Tip: clic en un color para aplicarlo a relleno (y contorno si es línea).</div>
+            </div>
+
+            <div class="styleBlock" id="stylePointBlock">
+              <div class="label">Símbolo (puntos)</div>
+              <div id="styleShapeGrid" class="shapeGrid">
+                <button class="shapeBtn" data-shape="circle" title="Círculo"><span class="shapeIco shapeIco--circle"></span></button>
+                <button class="shapeBtn" data-shape="square" title="Cuadrado"><span class="shapeIco shapeIco--square"></span></button>
+                <button class="shapeBtn" data-shape="triangle" title="Triángulo"><span class="shapeIco shapeIco--triangle"></span></button>
+                <button class="shapeBtn" data-shape="diamond" title="Rombo"><span class="shapeIco shapeIco--diamond"></span></button>
+                <button class="shapeBtn" data-shape="star" title="Estrella"><span class="shapeIco shapeIco--star"></span></button>
+              </div>
+              <div class="label mt10">Íconos (ubicación)</div>
+              <div id="styleIconGrid" class="iconGrid">
+                <button class="iconBtn" data-shape="icon:pin" title="Pin"><span class="svgIco" data-ico="pin"></span></button>
+                <button class="iconBtn" data-shape="icon:home" title="Casa"><span class="svgIco" data-ico="home"></span></button>
+                <button class="iconBtn" data-shape="icon:hospital" title="Hospital"><span class="svgIco" data-ico="hospital"></span></button>
+                <button class="iconBtn" data-shape="icon:school" title="Escuela"><span class="svgIco" data-ico="school"></span></button>
+                <button class="iconBtn" data-shape="icon:police" title="Policía"><span class="svgIco" data-ico="police"></span></button>
+                <button class="iconBtn" data-shape="icon:fire" title="Bomberos"><span class="svgIco" data-ico="fire"></span></button>
+                <button class="iconBtn" data-shape="icon:bus" title="Bus"><span class="svgIco" data-ico="bus"></span></button>
+                <button class="iconBtn" data-shape="icon:shop" title="Comercio"><span class="svgIco" data-ico="shop"></span></button>
+                <button class="iconBtn" data-shape="icon:warning" title="Alerta"><span class="svgIco" data-ico="warning"></span></button>
+                <button class="iconBtn" data-shape="icon:info" title="Info"><span class="svgIco" data-ico="info"></span></button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Right: preview + controls -->
+          <div class="styleRight">
+            <div class="stylePreviewWrap">
+              <div class="stylePreviewHead">
+                <div class="label">Vista previa</div>
+                <div id="styleGeomLabel" class="tiny muted"></div>
+              </div>
+              <canvas id="stylePreview" width="520" height="180"></canvas>
+            </div>
+
+            <div class="styleControls">
+              <div class="fieldRow">
+                <div class="field">
+                  <label class="label">Relleno</label>
+                  <button id="styleFillSwatch" class="swatch" title="Cambiar color de relleno"></button>
+                </div>
+                <div class="field" id="styleStrokeField">
+                  <label class="label">Contorno</label>
+                  <button id="styleStrokeSwatch" class="swatch" title="Cambiar color de contorno"></button>
+                </div>
+              </div>
+
+              <div class="fieldRow">
+                <div class="field">
+                  <label class="label">Ancho línea</label>
+                  <input type="number" id="styleWeightNum" class="input input--sm" min="0" max="50" step="0.5" />
+                </div>
+
+                <div class="field" id="styleRadiusField">
+                  <label class="label">Tamaño punto</label>
+                  <input type="number" id="styleRadiusNum" class="input input--sm" min="1" max="40" step="1" />
+                </div>
+
+                <div class="field">
+                  <label class="label">Transparencia (%)</label>
+                  <input type="number" id="styleOpacityPct" class="input input--sm" min="0" max="100" step="1" />
+                </div>
+              </div>
+
+              <div class="hint mt10">Los cambios se aplican a la capa seleccionada. La vista previa se actualiza en tiempo real.</div>
+            </div>
+
+            <div id="styleColorPop" class="colorpop" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__foot">
+        <button id="styleApply" class="btn btn--primary">OK</button>
+        <button id="styleReset" class="btn btn--ghost">Restablecer</button>
+        <button id="styleCancel" class="btn btn--ghost">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Modal: Configuración (Datos) -->
+  <div id="settingsModal" class="modal" aria-hidden="true">
+    <div id="settingsBackdrop" class="modal__backdrop"></div>
+    <div class="modal__dialog modal__dialog--narrow" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+      <div class="modal__head">
+        <div id="settingsModalTitle" class="modal__title">Configuración</div>
+        <button id="settingsClose" class="iconbtn iconbtn--small" title="Cerrar">×</button>
+      </div>
+      <div class="modal__body">
+        <section class="card">
+        <div class="card__title">Carga de datos</div>
+        <div class="filebox">
+          <input type="file" id="fileInput" accept=".csv,.txt" />
+          <div class="hint">
+            <div><b>Tip:</b> Si abres <code>index.html</code> con doble click (modo <code>file://</code>), carga el archivo <b>CSV o TXT</b> desde aquí.</div>
+            <div class="mt6">También puedes iniciar un servidor local y usar el botón “Cargar ejemplo”.</div>
+          </div>
+        </div>
+        <div class="row mt10">
+          <button id="btnLoadExample" class="btn btn--soft">Cargar ejemplo (data/sample.csv)</button>
+        </div>
+        <div id="dataStatus" class="status mt10">Sin datos cargados.</div>
+      </section>
+        <section class="card mt10">
+          <div class="card__title">Apariencia del dashboard</div>
+          <div class="hint">Configura colores, tipografía y moneda. Se guarda en este navegador (localStorage) y se aplica al instante.</div>
+
+          <div class="mt10 grid2">
+            <div>
+              <label class="label">Fondo general</label>
+              <input type="color" id="themeAppBg" class="input input--color" />
+            </div>
+            <div>
+              <label class="label">Fondo de secciones</label>
+              <input type="color" id="themePanelBg" class="input input--color" />
+            </div>
+          </div>
+
+          <div class="mt10 grid2">
+            <div>
+              <label class="label">Encabezados</label>
+              <input type="color" id="themeHeaderBg" class="input input--color" />
+            </div>
+            <div>
+              <label class="label">Acento (botones/realces)</label>
+              <input type="color" id="themeAccent" class="input input--color" />
+            </div>
+          </div>
+
+          <div class="mt10 grid2">
+            <div>
+              <label class="label">Texto principal</label>
+              <input type="color" id="themeText" class="input input--color" />
+            </div>
+            <div>
+              <label class="label">Texto secundario</label>
+              <input type="color" id="themeMuted" class="input input--color" />
+            </div>
+          </div>
+
+          <div class="mt10 grid2">
+            <div>
+              <label class="label">Fuente (Web-safe / sistema)</label>
+              <select id="themeFontFamily" class="select">
+                <option value="system">Sistema (recomendado)</option>
+                <option value="arial">Arial</option>
+                <option value="segoe">Segoe UI</option>
+                <option value="roboto">Roboto (si existe)</option>
+                <option value="tahoma">Tahoma</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">Tamaño base (px)</label>
+              <input type="number" id="themeFontSize" class="input" min="12" max="18" step="1" />
+            </div>
+          </div>
+
+          <div class="mt10 grid2">
+            <div>
+              <label class="label">Moneda</label>
+              <select id="themeCurrency" class="select">
+                <option value="HNL" selected>HNL (Lempira)</option>
+                <option value="USD">USD (Dólar)</option>
+                <option value="GTQ">GTQ (Quetzal)</option>
+                <option value="MXN">MXN (Peso)</option>
+                <option value="EUR">EUR (Euro)</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">Formato regional (locale)</label>
+              <select id="themeLocale" class="select">
+                <option value="es-HN" selected>es-HN</option>
+                <option value="es-GT">es-GT</option>
+                <option value="es-MX">es-MX</option>
+                <option value="es-ES">es-ES</option>
+                <option value="en-US">en-US</option>
+              </select>
+            </div>
+          </div>
+
+          
+          <div class="mt10">
+            <label class="label">Colores de gráficos</label>
+            <div class="hint">Cada color afecta los componentes indicados; la vista previa se actualiza al instante.</div>
+
+            <div class="paletteGrid mt8">
+              <div class="palItem">
+                <input type="color" id="chartColor1" class="swatch" title="Color 1" />
+                <div class="palLbl"><b>Color 1</b>: Barras principales</div>
+              </div>
+              <div class="palItem">
+                <input type="color" id="chartColor2" class="swatch" title="Color 2" />
+                <div class="palLbl"><b>Color 2</b>: Segmento 2</div>
+              </div>
+              <div class="palItem">
+                <input type="color" id="chartColor3" class="swatch" title="Color 3" />
+                <div class="palLbl"><b>Color 3</b>: Segmento 3</div>
+              </div>
+              <div class="palItem">
+                <input type="color" id="chartColor4" class="swatch" title="Color 4" />
+                <div class="palLbl"><b>Color 4</b>: Segmento 4</div>
+              </div>
+              <div class="palItem">
+                <input type="color" id="chartColor5" class="swatch" title="Color 5" />
+                <div class="palLbl"><b>Color 5</b>: Segmento 5</div>
+              </div>
+            </div>
+
+            <div class="mt10">
+              <div class="card__title">Vista previa</div>
+              <div class="previewRow">
+                <div class="previewCard">
+                  <div class="previewTitle">Barras</div>
+                  <canvas id="themePreviewBar" width="600" height="220"></canvas>
+                </div>
+                <div class="previewCard">
+                  <div class="previewTitle">Donut</div>
+                  <canvas id="themePreviewDonut" width="600" height="220"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="hint mt10">Los cambios se pueden previsualizar abajo y aplicar desde los botones al final de esta ventana.</div>
+        </section>
+
+      </div>
+      
+      <div class="modal__foot modal__foot--stack">
+        <div class="modal__footerTheme">
+          <button id="btnThemeApply" class="btn btn--primary">Aplicar tema</button>
+          <button id="btnThemeReset" class="btn btn--ghost">Restablecer</button>
+        </div>
+        <div class="modal__footerActions">
+          <button id="settingsDone" class="btn btn--soft">Listo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal: Mapas base -->
+  <div id="basemapModal" class="modal" aria-hidden="true">
+    <div id="basemapBackdrop" class="modal__backdrop"></div>
+    <div class="modal__dialog modal__dialog--narrow" role="dialog" aria-modal="true" aria-labelledby="basemapModalTitle">
+      <div class="modal__head">
+        <div id="basemapModalTitle" class="modal__title">Mapas base</div>
+        <button id="basemapClose" class="iconbtn iconbtn--small" title="Cerrar">×</button>
+      </div>
+      
+      <div class="modal__body">
+        <div class="hint">
+          Elige un mapa base. Si no hay internet, el mapa base no cargará, pero tus capas seguirán visibles.
+          <div class="mt6 note">Nota: “Google Satélite” no se ofrece como tiles abiertos. Usa ESRI Imagery o un servicio XYZ/WMS autorizado.</div>
+        </div>
+
+        <div class="mt10">
+          <label class="label">Mapa base</label>
+          <select id="basemapStyle" class="select">
+            <optgroup label="OpenStreetMap">
+              <option value="standard">OSM Standard</option>
+              <option value="hot">OSM Humanitarian (HOT)</option>
+              <option value="de">OSM DE</option>
+            </optgroup>
+            <optgroup label="Satélite y cartografía">
+              <option value="esriImg">ESRI World Imagery (Satélite)</option>
+              <option value="esriTopo">ESRI World Topo</option>
+            </optgroup>
+            <optgroup label="Personalizados">
+              <option value="xyzCustom">XYZ (template {z}/{x}/{y})</option>
+              <option value="wmsCustom">WMS (GetMap por teselas)</option>
+              <option value="googleSatInfo">Google Satélite (información)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div id="basemapCustomWrap" class="mt12">
+          <div id="bmXYZ" class="bmCfg">
+            <label class="label">URL XYZ (template)</label>
+            <input id="bmXyzTemplate" class="input" placeholder="https://servidor/tiles/{z}/{x}/{y}.png" />
+            <div class="hint mt6">Debe permitir CORS. Para servicios privados, suele funcionar mejor vía proxy o mismo dominio.</div>
+          </div>
+
+          <div id="bmWMS" class="bmCfg">
+            <label class="label">URL WMS (endpoint)</label>
+            <input id="bmWmsUrl" class="input" placeholder="https://servidor/wms" />
+            <div class="grid2 mt10">
+              <div>
+                <label class="label">LAYERS</label>
+                <input id="bmWmsLayers" class="input" placeholder="capa1,capa2" />
+              </div>
+              <div>
+                <label class="label">FORMAT</label>
+                <input id="bmWmsFormat" class="input" value="image/png" />
+              </div>
+            </div>
+            <div class="grid2 mt10">
+              <div>
+                <label class="label">VERSION</label>
+                <input id="bmWmsVersion" class="input" value="1.3.0" />
+              </div>
+              <div>
+                <label class="label">TRANSPARENT</label>
+                <select id="bmWmsTransparent" class="select">
+                  <option value="false" selected>false</option>
+                  <option value="true">true</option>
+                </select>
+              </div>
+            </div>
+            <label class="label mt10">Parámetros extra (opcional)</label>
+            <input id="bmWmsExtra" class="input" placeholder="token=...&STYLES=" />
+            <div class="hint mt6">El WMS se solicita en EPSG:3857 por teselas 256x256. El servidor debe permitir CORS.</div>
+          </div>
+
+          <div id="bmGoogleInfo" class="bmCfg">
+            <div class="hint">Google no publica un endpoint XYZ abierto. Para ver satélite en el visor usa <b>ESRI World Imagery</b> o configura un servicio XYZ/WMS autorizado.</div>
+          </div>
+        </div>
+
+        <div class="mt16 wfsBox">
+          <div class="label">Agregar WFS como capa (opcional)</div>
+          <div class="hint">WFS es vectorial (no raster). Se agregará como una capa normal al listado (abajo). Requiere CORS.</div>
+          <input id="wfsUrl" class="input mt10" placeholder="https://servidor/wfs" />
+          <input id="wfsTypeName" class="input mt10" placeholder="typeNames (ej: workspace:capa)" />
+          <div class="row mt10">
+            <button id="btnAddWfs" class="btn btn--soft">Agregar WFS</button>
+            <div id="wfsStatus" class="status status--mini"></div>
+          </div>
+        </div>
+      </div>
+<div class="modal__foot">
+        <button id="basemapApply" class="btn btn--primary">Aplicar</button>
+      </div>
+    </div>
+  </div>
+
+<script src="assets/vendor/jszip.min.js"></script>
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>
